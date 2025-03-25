@@ -1,15 +1,24 @@
 const express = require("express");
 const cors = require("cors");
-const routes = require("../src/routes/routes");  // Ajuste conforme o caminho real do seu arquivo
+const routes = require("../src/routes/routes");
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Usa as rotas
+// Log de início
+console.log('Servidor iniciado');
+
+// Rotas
 app.use(routes);
 
-// Exporta o app como uma função que a Vercel pode invocar
-module.exports = (req, res) => app(req, res);
+// Inicia o servidor
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+});
+
+// Exporte o app para ser utilizado pela Vercel
+module.exports = app;
