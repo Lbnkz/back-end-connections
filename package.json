@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Este repositório contém um **back-end em Node.js** para execução dinâmica de queries em múltiplos bancos de dados (**Oracle, Firebird, MySQL, PostgreSQL e MongoDB**).",
   "main": "index.js",
+  "engines": {
+    "node": ">=18.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
