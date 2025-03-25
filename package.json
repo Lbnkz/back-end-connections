@@ -1,0 +1,23 @@
+{
+  "name": "back-end-connections",
+  "version": "1.0.0",
+  "description": "Este repositório contém um **back-end em Node.js** para execução dinâmica de queries em múltiplos bancos de dados (**Oracle, Firebird, MySQL, PostgreSQL e MongoDB**).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mongoose": "^8.13.0",
+    "mysql2": "^3.14.0",
+    "node-firebird": "^1.1.9",
+    "oracledb": "^5.5.0",
+    "pg": "^8.14.1"
+  }
+}
