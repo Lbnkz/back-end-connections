@@ -4,8 +4,10 @@ const oracledb = require("oracledb");
 const Firebird = require("node-firebird");
 const mongoose = require("mongoose");
 
-const createConnection = async ({ dbType, host, port, username, password, database }) => {
-  switch (dbType.toLowerCase()) {
+const createConnection = async (dbType, host, port, username, password, database) => {
+  console.log(`Tentando conectar ao banco de dados: ${dbType}`);
+
+  switch (dbType) {
     case "mysql":
       console.log("Conectando ao banco de dados MySQL...");
       return await mysql.createConnection({ host, port, user: username, password, database });
@@ -30,8 +32,10 @@ const createConnection = async ({ dbType, host, port, username, password, databa
       });
 
     default:
+      console.error(`Erro: Banco de dados não suportado! Tipo recebido: ${dbType}`);
       throw new Error("Banco de dados não suportado!");
   }
 };
+
 
 module.exports = { createConnection };

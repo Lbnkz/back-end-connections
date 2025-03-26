@@ -1,4 +1,5 @@
 const connection = require("../database/connection");
+require('dotenv').config();
 
 const executeQuery = async (query) => {
     let conn;
@@ -87,22 +88,40 @@ const saveConfig = async (config) => {
     console.log('Salvando configuração...');
     console.log(`Tipo de banco: ${config.dbType}, Host: ${config.host}, Porta: ${config.port}, Usuário: ${config.username}, Banco: ${config.database}`);
 
+    // Verifique se todos os campos necessários foram passados
+    const requiredFields = ['dbType', 'host', 'port', 'username', 'password', 'database'];
+    for (let field of requiredFields) {
+        if (!config[field]) {
+            throw new Error(`Campo obrigatório ${field} não fornecido.`);
+        }
+    }
+
     let conn;
     try {
-        // Certifique-se de que todos os dados necessários estão sendo passados
-        conn = await connection.createConnection(process.env.DB_TYPE, process.env.HOST, process.env.PORT, process.env.USER, process.env.PASSWORD, process.env.DATABASE);
+        console.log(process.env.DB_TYPE);
+        console.log(process.env.HOST);
+        // Crie a conexão com base nos dados fornecidos
+        conn = await connection.createConnection(
+            process.env.DB_TYPE,
+            process.env.HOST,
+            process.env.PORT_DB,
+            process.env.USER,
+            process.env.PASSWORD,
+            process.env.DATABASE
+        );
 
         // Verifique se a conexão foi criada corretamente antes de seguir para a query
         if (!conn) {
             throw new Error("Falha ao criar a conexão.");
         }
 
+        // Prepare e execute a query de inserção
         let query = await conn.prepare('INSERT INTO connections (name, db_type, host, port, user, password, database_name) VALUES (?, ?, ?, ?, ?, ?, ?)');
         await query.execute([config.name, config.dbType, config.host, config.port, config.username, config.password, config.database]);
         await query.close();
+
         console.log('Configuração salva com sucesso');
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Erro ao salvar configuração:', {
             error: error.message,
             stack: error.stack,
@@ -110,7 +129,8 @@ const saveConfig = async (config) => {
         });
         throw error;
     }
-}
+};
+
 
 
 module.exports = { executeQuery, saveConfig };
