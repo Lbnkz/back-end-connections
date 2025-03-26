@@ -11,7 +11,16 @@ router.get("/", (req, res) => {
 router.post("/v1/execute-query", async (req, res) => {
   try {
     const result = await executeQuery(req.body);
-    res.json({ success: true, data: result });
+    res.status(200).json({ result });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.post("/v1/save-config", async (req, res) => {
+  try {
+    const result = await saveConfig(req.body);
+    res.status(200).json({ success: true, message: "Configuração salva com sucesso!" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

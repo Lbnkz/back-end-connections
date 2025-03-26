@@ -22,6 +22,13 @@ const createConnection = async ({ dbType, host, port, username, password, databa
       console.log("Conectando ao banco de dados Firebird...");
       return new Firebird.pool(5, { host, port, database, user: username, password });
 
+    case "mongodb":
+      console.log("Conectando ao banco de dados MongoDB...");
+      return mongoose.connect(`mongodb://${username}:${password}@${host}:${port}/${database}`, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+
     default:
       throw new Error("Banco de dados não suportado!");
   }

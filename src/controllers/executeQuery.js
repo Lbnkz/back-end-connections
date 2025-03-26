@@ -53,6 +53,19 @@ const executeQuery = async (query) => {
                 result = await Promise.resolve(promise);
                 break;
 
+            case 'mongodb':
+                // MongoDB usa callback
+                promise = new Promise((resolve, reject) => {
+                    conn.collection(query.collection).find(query.filter).toArray((err, result) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        resolve(result);
+                    });
+                });
+                result = await Promise.resolve(promise);
+                break;
+
             default:
                 throw new Error('Banco de dados não suportado');
         }
@@ -65,6 +78,24 @@ const executeQuery = async (query) => {
             error: error.message,
             stack: error.stack,
             query: query
+        });
+        throw error;
+    }
+}
+
+const saveConfig = async (config) => {
+    console.log('Salvando configuração...');
+    console.log(`Tipo de banco: ${config.dbType}, Host: ${config.host}, Porta: ${config.port}, Usuário: ${config.user}, Banco: ${config.database}`);
+
+    try {
+        await connection.createConnection(config);
+        console.log('Configuração salva com sucesso');
+    }
+    catch (error) {
+        console.error('Erro ao salvar configuração:', {
+            error: error.message,
+            stack: error.stack,
+            config: config
         });
         throw error;
     }
