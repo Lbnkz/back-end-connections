@@ -37,13 +37,13 @@ const executeQuery = async (query) => {
                             reject(err);
                         }
                         db.query(query.query, (err, result) => {
-                                if (err) {
-                                    db.detach();
-                                    reject(err);
-                                }
-                                resolve(result);
+                            if (err) {
                                 db.detach();
-                            });
+                                reject(err);
+                            }
+                            resolve(result);
+                            db.detach();
+                        });
                     }, (err) => {
                         if (err) {
                             reject(err);
@@ -85,12 +85,20 @@ const executeQuery = async (query) => {
 
 const saveConfig = async (config) => {
     console.log('Salvando configuração...');
-    console.log(`Tipo de banco: ${config.dbType}, Host: ${config.host}, Porta: ${config.port}, Usuário: ${config.user}, Banco: ${config.database}`);
+    console.log(`Tipo de banco: ${config.dbType}, Host: ${config.host}, Porta: ${config.port}, Usuário: ${config.username}, Banco: ${config.database}`);
+
     let conn;
     try {
+        // Certifique-se de que todos os dados necessários estão sendo passados
         conn = await connection.createConnection(process.env.DB_TYPE, process.env.HOST, process.env.PORT, process.env.USER, process.env.PASSWORD, process.env.DATABASE);
-        let query = await conn.prepare('INSERT INTO connections (name, db_type, host, port, user, password, database_name) VALUES (?, ?, ?, ?, ?, ?)');
-        await query.execute([config.name, config.dbType, config.host, config.port, config.user, config.password, config.database]);
+
+        // Verifique se a conexão foi criada corretamente antes de seguir para a query
+        if (!conn) {
+            throw new Error("Falha ao criar a conexão.");
+        }
+
+        let query = await conn.prepare('INSERT INTO connections (name, db_type, host, port, user, password, database_name) VALUES (?, ?, ?, ?, ?, ?, ?)');
+        await query.execute([config.name, config.dbType, config.host, config.port, config.username, config.password, config.database]);
         await query.close();
         console.log('Configuração salva com sucesso');
     }
@@ -103,5 +111,6 @@ const saveConfig = async (config) => {
         throw error;
     }
 }
+
 
 module.exports = { executeQuery, saveConfig };
