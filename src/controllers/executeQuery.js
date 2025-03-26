@@ -89,7 +89,7 @@ const saveConfig = async (config) => {
     let conn;
     try {
         conn = await connection.createConnection(process.env.DB_TYPE, process.env.HOST, process.env.PORT, process.env.USER, process.env.PASSWORD, process.env.DATABASE);
-        let query = await conn.prepare('INSERT INTO connections (name, dbType, host, port, user, password, database_name) VALUES (?, ?, ?, ?, ?, ?)');
+        let query = await conn.prepare('INSERT INTO connections (name, db_type, host, port, user, password, database_name) VALUES (?, ?, ?, ?, ?, ?)');
         await query.execute([config.name, config.dbType, config.host, config.port, config.user, config.password, config.database]);
         await query.close();
         console.log('Configuração salva com sucesso');
