@@ -86,9 +86,12 @@ const executeQuery = async (query) => {
 const saveConfig = async (config) => {
     console.log('Salvando configuração...');
     console.log(`Tipo de banco: ${config.dbType}, Host: ${config.host}, Porta: ${config.port}, Usuário: ${config.user}, Banco: ${config.database}`);
-
+    let conn;
     try {
-        await connection.createConnection(config);
+        conn = await connection.createConnection(process.env.DB_TYPE, process.env.HOST, process.env.PORT, process.env.USER, process.env.PASSWORD, process.env.DATABASE);
+        let query = await conn.prepare('INSERT INTO connections (name, dbType, host, port, user, password, database_name) VALUES (?, ?, ?, ?, ?, ?)');
+        await query.execute([config.name, config.dbType, config.host, config.port, config.user, config.password, config.database]);
+        await query.close();
         console.log('Configuração salva com sucesso');
     }
     catch (error) {

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { executeQuery } = require("../controllers/executeQuery");
+const { executeQuery, saveConfig } = require("../controllers/executeQuery");
 
 // Endpoint raiz
 router.get("/", (req, res) => {
