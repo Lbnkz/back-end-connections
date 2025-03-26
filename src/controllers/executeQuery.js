@@ -101,4 +101,4 @@ const saveConfig = async (config) => {
     }
 }
 
-module.exports = { executeQuery };
+module.exports = { executeQuery, saveConfig };
