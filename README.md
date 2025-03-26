@@ -82,15 +82,14 @@ O servidor será iniciado na porta definida no `.env` (padrão: **3000**).
 ```
 back-end-connections/
 │── src/
+|   ├── api/               # Ponto de entrada da aplicação
 │   ├── config/            # Configuração dos bancos de dados
 │   ├── database/          # Conexões dinâmicas
 │   ├── routes/            # Rotas da API
 │   ├── controllers/       # Lógica das requisições
-│   ├── services/          # Regras de negócio
 │── .env.example           # Exemplo de variáveis de ambiente
 │── package.json           # Dependências do projeto
 │── README.md              # Documentação
-│── server.js              # Ponto de entrada da aplicação
 ```
 
 ## 📌 Próximos Passos
